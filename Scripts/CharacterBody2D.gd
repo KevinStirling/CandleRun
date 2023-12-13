@@ -1,14 +1,15 @@
 extends CharacterBody2D
 
 # DEBUG SHIT
-@onready var size_1 = $"../CanvasLayer/Size1"
-@onready var size_2 = $"../CanvasLayer/Size2"
-@onready var size_3 = $"../CanvasLayer/Size3"
-@onready var label = $"../CanvasLayer/Label"
+#@onready var size_1 = $"../CanvasLayer/Size1"
+#@onready var size_2 = $"../CanvasLayer/Size2"
+#@onready var size_3 = $"../CanvasLayer/Size3"
+#@onready var label = $"../CanvasLayer/Label"
 
 @onready var animation_size_1 = $Size1
 @onready var animation_size_2 = $Size2
 @onready var animation_size_3 = $Size3
+@onready var dead = $Dead
 
 @onready var collision_shape_size_1 = $CollisionShapeSize1
 @onready var collision_shape_size_2 = $CollisionShapeSize2
@@ -34,9 +35,13 @@ var current_distance_left : float :
 	set (value) :
 		if value <= 0.0 && current_anim_size != 1:
 			decrease_anim_size()
+		elif value <= 0.0 && current_anim_size == 1 :
+			process_mode = Node.PROCESS_MODE_DISABLED
+			animation_size_1.visible = false
+			dead.visible = true
 		else :
 			current_distance_left = value
-			label.text = str(current_distance_left)
+			#label.text = str(current_distance_left)
 		
 	get :
 		return current_distance_left
@@ -60,6 +65,9 @@ func set_anim_size(size):
 			animation_size_1.visible = true
 			animation_size_2.visible = false
 			animation_size_3.visible = false
+			animation_size_1.process_mode = Node.PROCESS_MODE_INHERIT
+			animation_size_2.process_mode = Node.PROCESS_MODE_DISABLED
+			animation_size_3.process_mode = Node.PROCESS_MODE_DISABLED
 			collision_shape_size_1.disabled = false
 			collision_shape_size_2.disabled = true
 			collision_shape_size_3.disabled = true
@@ -73,6 +81,9 @@ func set_anim_size(size):
 			animation_size_1.visible = false
 			animation_size_2.visible = true
 			animation_size_3.visible = false
+			animation_size_1.process_mode = Node.PROCESS_MODE_DISABLED
+			animation_size_2.process_mode = Node.PROCESS_MODE_INHERIT
+			animation_size_3.process_mode = Node.PROCESS_MODE_DISABLED
 			collision_shape_size_1.set_deferred("disabled", true)
 			collision_shape_size_2.set_deferred("disabled", false)
 			collision_shape_size_3.set_deferred("disabled", true)
@@ -84,6 +95,9 @@ func set_anim_size(size):
 			animation_size_1.visible = false
 			animation_size_2.visible = false
 			animation_size_3.visible = true
+			animation_size_1.process_mode = Node.PROCESS_MODE_DISABLED
+			animation_size_2.process_mode = Node.PROCESS_MODE_DISABLED
+			animation_size_3.process_mode = Node.PROCESS_MODE_INHERIT
 			collision_shape_size_1.set_deferred("disabled", true)
 			collision_shape_size_2.set_deferred("disabled", true)
 			collision_shape_size_3.set_deferred("disabled", false)
@@ -93,12 +107,13 @@ func set_anim_size(size):
 func _ready():
 #	MOVE ALL THIS SHIT INTO SOME STATE MANAGEMENT? eh maybe later...
 	set_anim_size(3)
-	size_1.pressed.connect(func():
-		set_anim_size(1))
-	size_2.pressed.connect(func():
-		set_anim_size(2))
-	size_3.pressed.connect(func():
-		set_anim_size(3))
+	#size_1.pressed.connect(func():
+		#set_anim_size(1))
+	#size_2.pressed.connect(func():
+		#set_anim_size(2))
+	#size_3.pressed.connect(func():
+		#set_anim_size(3))
+	pass
 
 func get_gravity() -> float:
 	return jump_gravity if velocity.y < 0.0 else fall_gravity

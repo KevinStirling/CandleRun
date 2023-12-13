@@ -20,7 +20,6 @@ func _body_entered(body : Node2D):
 			body.increase_anim_size()
 			queue_free()
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	position.y += fall_gravity * delta

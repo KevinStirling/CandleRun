@@ -1,16 +1,17 @@
-[gd_scene load_steps=57 format=3 uid="uid://domcgy8cnu58f"]
+[gd_scene load_steps=61 format=3 uid="uid://domcgy8cnu58f"]
 
 [ext_resource type="Script" path="res://Scripts/CharacterBody2D.gd" id="1_udora"]
 [ext_resource type="Texture2D" uid="uid://du554nbshl7th" path="res://Assets/candle_size1-Sheet.png" id="2_7ovjg"]
 [ext_resource type="Texture2D" uid="uid://cgqxxcuk66phb" path="res://Assets/candle_size2-Sheet.png" id="3_qco0r"]
 [ext_resource type="Texture2D" uid="uid://b5g7ek78atmiw" path="res://Assets/candle_size3-Sheet.png" id="4_k1fxy"]
+[ext_resource type="Texture2D" uid="uid://crq31dkmgi6vb" path="res://Assets/dead_candle.png" id="5_wsheg"]
 
-[sub_resource type="Gradient" id="Gradient_cwrx1"]
+[sub_resource type="Gradient" id="Gradient_ych10"]
 offsets = PackedFloat32Array(0.0722348, 0.670429)
 colors = PackedColorArray(1, 1, 1, 1, 0.133333, 0.133333, 0.133333, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_xs23g"]
-gradient = SubResource("Gradient_cwrx1")
+gradient = SubResource("Gradient_ych10")
 width = 256
 height = 256
 fill = 1
@@ -182,8 +183,11 @@ animations = [{
 "speed": 15.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6vn0"]
+size = Vector2(9, 10)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0gvoh"]
-size = Vector2(10, 17)
+size = Vector2(10, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3borm"]
 atlas = ExtResource("3_qco0r")
@@ -296,8 +300,11 @@ animations = [{
 "speed": 15.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1b71j"]
+size = Vector2(9, 13)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bh5ef"]
-size = Vector2(9, 32)
+size = Vector2(9, 31)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sliop"]
 atlas = ExtResource("4_k1fxy")
@@ -410,8 +417,11 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bcawc"]
+size = Vector2(9, 12)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8veo7"]
-size = Vector2(9, 48)
+size = Vector2(9, 47)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 z_index = 2
@@ -420,15 +430,16 @@ script = ExtResource("1_udora")
 jump_height = 30.0
 jump_time_to_peak = 0.25
 jump_time_to_descent = 0.2
+distance_between_sizes = 1.1
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(1, -19)
+position = Vector2(0, -8)
 color = Color(0.976471, 0.847059, 0.698039, 1)
 energy = 1.44
 blend_mode = 2
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_xs23g")
-texture_scale = 0.5
+texture_scale = 0.7
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="PointLight2D"]
 libraries = {
@@ -437,15 +448,26 @@ libraries = {
 autoplay = "flicker"
 
 [node name="Size1" type="AnimatedSprite2D" parent="."]
-visible = false
 position = Vector2(1, -25)
 sprite_frames = SubResource("SpriteFrames_5pqup")
 animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.184702
 
+[node name="Flame" type="Area2D" parent="Size1"]
+visible = false
+position = Vector2(-1, 14)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Size1/Flame"]
+visible = false
+position = Vector2(0.5, -1)
+shape = SubResource("RectangleShape2D_w6vn0")
+
 [node name="CollisionShapeSize1" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1.5)
+visible = false
+position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_0gvoh")
 
 [node name="Size2" type="AnimatedSprite2D" parent="."]
@@ -456,17 +478,45 @@ animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.456261
 
+[node name="Flame" type="Area2D" parent="Size2"]
+visible = false
+position = Vector2(0, -3)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Size2/Flame"]
+visible = false
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_1b71j")
+
 [node name="CollisionShapeSize2" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, -9)
+visible = false
+position = Vector2(0.5, -8.5)
 shape = SubResource("RectangleShape2D_bh5ef")
 
 [node name="Size3" type="AnimatedSprite2D" parent="."]
 visible = false
-position = Vector2(1, -24)
+position = Vector2(1, -25)
 sprite_frames = SubResource("SpriteFrames_adwqj")
 animation = &"idle"
 autoplay = "idle"
 
+[node name="Flame" type="Area2D" parent="Size3"]
+visible = false
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Size3/Flame"]
+visible = false
+position = Vector2(-0.5, -20)
+shape = SubResource("RectangleShape2D_bcawc")
+
 [node name="CollisionShapeSize3" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, -16)
+visible = false
+position = Vector2(0.5, -16.5)
 shape = SubResource("RectangleShape2D_8veo7")
+
+[node name="Dead" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1, -25)
+texture = ExtResource("5_wsheg")
