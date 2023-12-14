@@ -1,4 +1,7 @@
 extends CharacterBody2D
+class_name CandleMan
+
+signal died
 
 # DEBUG SHIT
 #@onready var size_1 = $"../CanvasLayer/Size1"
@@ -39,7 +42,8 @@ var current_distance_left : float :
 			process_mode = Node.PROCESS_MODE_DISABLED
 			animation_size_1.visible = false
 			dead.visible = true
-		else :
+			died.emit()
+		elif !is_on_wall():
 			current_distance_left = value
 			#label.text = str(current_distance_left)
 		
@@ -59,6 +63,8 @@ func decrease_anim_size():
 
 
 func set_anim_size(size):
+	process_mode = Node.PROCESS_MODE_INHERIT
+	dead.visible = false
 	match size :
 		1 :
 			current_distance_left = distance_between_sizes
@@ -87,7 +93,6 @@ func set_anim_size(size):
 			collision_shape_size_1.set_deferred("disabled", true)
 			collision_shape_size_2.set_deferred("disabled", false)
 			collision_shape_size_3.set_deferred("disabled", true)
-			collision_shape_size_3.disabled = true
 			current_animation = animation_size_2
 			current_anim_size = 2
 		3 :
