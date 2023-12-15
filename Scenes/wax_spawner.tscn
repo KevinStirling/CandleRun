@@ -121,10 +121,10 @@ script = ExtResource("1_2hsb6")
 shape = SubResource("RectangleShape2D_ctuku")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 4.0
 
 [node name="SpawnPoint" type="Marker2D" parent="."]
-position = Vector2(0, 10)
+position = Vector2(-9, 8)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
@@ -141,7 +141,8 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_rckgf")
 texture_scale = 0.7
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PointLight2D"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../PointLight2D")
 libraries = {
 "": SubResource("AnimationLibrary_35ai5")
 }

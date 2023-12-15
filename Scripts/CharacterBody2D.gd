@@ -21,7 +21,9 @@ signal died
 @onready var current_animation : AnimatedSprite2D
 
 
-const SPEED = 100.0
+@export var SPEED = 100.0
+@export var slide_speed = 100.0
+@export var turn_speed = 100.0
 #const JUMP_VELOCITY = -250.0
 
 @export var jump_height : float
@@ -31,6 +33,8 @@ const SPEED = 100.0
 @onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0
 @onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
 @onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
+
+@onready var coyote_timer = $CoyoteTimer
 
 @export var distance_between_sizes : float
 var current_anim_size : int
@@ -123,31 +127,49 @@ func _ready():
 func get_gravity() -> float:
 	return jump_gravity if velocity.y < 0.0 else fall_gravity
 
+var last_dir_before_jump : float
+var direction : float
 
 func _physics_process(delta):
-	# Add the gravity.
-	# with this jump gravity impl, if you dont start on the floor you cant jump..
+
 	if not is_on_floor():
-		#velocity.y += gravity * delta
 		velocity.y += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and (is_on_floor() || !coyote_timer.is_stopped()):
+		last_dir_before_jump = direction
 		velocity.y = jump_velocity
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction = Input.get_axis("ui_left", "ui_right")
+	direction = Input.get_axis("ui_left", "ui_right")
 	if direction:
-		velocity.x = direction * SPEED
-		if velocity.x > 0 :
-			current_animation.flip_h = false
+		var previous_vel = velocity
+		if not is_on_floor() && direction == -(last_dir_before_jump):
+			velocity.x = (direction * SPEED) / (2 + delta)
 		else:
+			velocity.x = direction * SPEED
+		if velocity.x > 0 :
+			rotation_degrees = lerp(rotation_degrees, -5.0, .1)
+			current_animation.flip_h = false
+			if previous_vel.x < 0 :
+				velocity.x = move_toward(previous_vel.x, velocity.x, slide_speed)
+		else:
+			rotation_degrees = lerp(rotation_degrees, 5.0, .1)
 			current_animation.flip_h = true
+			if previous_vel.x > 0 :
+				velocity.x = move_toward(previous_vel.x, velocity.x, slide_speed)
 		current_animation.play("run")
 		current_distance_left = current_distance_left - delta
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		rotation_degrees = lerp(rotation_degrees, 0.0, .1)
+		velocity.x = move_toward(velocity.x, 0, slide_speed)
 		current_animation.play("idle")
 
+	var was_on_floor = is_on_floor()
+
+	
 	move_and_slide()
+
+	if was_on_floor && !is_on_floor():
+		coyote_timer.start()
+	

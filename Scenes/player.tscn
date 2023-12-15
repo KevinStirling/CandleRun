@@ -187,7 +187,7 @@ animations = [{
 size = Vector2(9, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0gvoh"]
-size = Vector2(10, 16)
+size = Vector2(10, 15)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3borm"]
 atlas = ExtResource("3_qco0r")
@@ -280,7 +280,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 12.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -304,7 +304,7 @@ animations = [{
 size = Vector2(9, 13)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bh5ef"]
-size = Vector2(9, 31)
+size = Vector2(9, 30)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sliop"]
 atlas = ExtResource("4_k1fxy")
@@ -397,7 +397,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 13.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -414,14 +414,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
-"speed": 12.0
+"speed": 15.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bcawc"]
 size = Vector2(9, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8veo7"]
-size = Vector2(9, 47)
+size = Vector2(9, 46)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 z_index = 2
@@ -429,7 +429,7 @@ script = ExtResource("1_udora")
 jump_height = 30.0
 jump_time_to_peak = 0.25
 jump_time_to_descent = 0.2
-distance_between_sizes = 1.1
+distance_between_sizes = 5.0
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, -8)
@@ -447,11 +447,12 @@ libraries = {
 autoplay = "flicker"
 
 [node name="Size1" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(1, -25)
 sprite_frames = SubResource("SpriteFrames_5pqup")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.184702
+frame_progress = 0.489412
 
 [node name="Flame" type="Area2D" parent="Size1"]
 visible = false
@@ -466,16 +467,16 @@ shape = SubResource("RectangleShape2D_w6vn0")
 
 [node name="CollisionShapeSize1" type="CollisionShape2D" parent="."]
 visible = false
-position = Vector2(0, -1)
+position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_0gvoh")
 
 [node name="Size2" type="AnimatedSprite2D" parent="."]
 visible = false
 position = Vector2(1, -25)
 sprite_frames = SubResource("SpriteFrames_7j6v2")
-animation = &"idle"
+animation = &"run"
 autoplay = "idle"
-frame_progress = 0.456261
+frame_progress = 0.656642
 
 [node name="Flame" type="Area2D" parent="Size2"]
 visible = false
@@ -490,15 +491,15 @@ shape = SubResource("RectangleShape2D_1b71j")
 
 [node name="CollisionShapeSize2" type="CollisionShape2D" parent="."]
 visible = false
-position = Vector2(0.5, -8.5)
+position = Vector2(0.5, -9)
 shape = SubResource("RectangleShape2D_bh5ef")
 
 [node name="Size3" type="AnimatedSprite2D" parent="."]
-visible = false
 position = Vector2(1, -25)
 sprite_frames = SubResource("SpriteFrames_adwqj")
-animation = &"idle"
+animation = &"run"
 autoplay = "idle"
+frame_progress = 0.39024
 
 [node name="Flame" type="Area2D" parent="Size3"]
 visible = false
@@ -512,7 +513,7 @@ shape = SubResource("RectangleShape2D_bcawc")
 
 [node name="CollisionShapeSize3" type="CollisionShape2D" parent="."]
 visible = false
-position = Vector2(0.5, -16.5)
+position = Vector2(0.5, -17)
 shape = SubResource("RectangleShape2D_8veo7")
 
 [node name="Dead" type="Sprite2D" parent="."]
@@ -522,5 +523,6 @@ texture = ExtResource("5_wsheg")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
-[node name="WallRayCast" type="RayCast2D" parent="."]
-target_position = Vector2(6, 0)
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
