@@ -429,7 +429,6 @@ script = ExtResource("1_udora")
 jump_height = 30.0
 jump_time_to_peak = 0.25
 jump_time_to_descent = 0.2
-distance_between_sizes = 5.0
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, -8)
@@ -525,4 +524,8 @@ texture = ExtResource("5_wsheg")
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 wait_time = 0.05
+one_shot = true
+
+[node name="DownsizeTimer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true

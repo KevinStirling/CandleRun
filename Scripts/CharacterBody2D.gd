@@ -4,9 +4,9 @@ class_name CandleMan
 signal died
 
 # DEBUG SHIT
-#@onready var size_1 = $"../CanvasLayer/Size1"
-#@onready var size_2 = $"../CanvasLayer/Size2"
-#@onready var size_3 = $"../CanvasLayer/Size3"
+@onready var size_1 = $"../CanvasLayer/Size1"
+@onready var size_2 = $"../CanvasLayer/Size2"
+@onready var size_3 = $"../CanvasLayer/Size3"
 #@onready var label = $"../CanvasLayer/Label"
 
 @onready var animation_size_1 = $Size1
@@ -35,24 +35,27 @@ signal died
 @onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
 
 @onready var coyote_timer = $CoyoteTimer
+@onready var downsize_timer = $DownsizeTimer
 
-@export var distance_between_sizes : float
+var previous_vel
+
+# @export var distance_between_sizes : float
 var current_anim_size : int
-var current_distance_left : float :
-	set (value) :
-		if value <= 0.0 && current_anim_size != 1:
-			decrease_anim_size()
-		elif value <= 0.0 && current_anim_size == 1 :
-			process_mode = Node.PROCESS_MODE_DISABLED
-			animation_size_1.visible = false
-			dead.visible = true
-			died.emit()
-		elif !is_on_wall():
-			current_distance_left = value
-			#label.text = str(current_distance_left)
+# var current_distance_left : float :
+# 	set (value) :
+# 		if value <= 0.0 && current_anim_size != 1:
+# 			decrease_anim_size()
+# 		elif value <= 0.0 && current_anim_size == 1 :
+# 			process_mode = Node.PROCESS_MODE_DISABLED
+# 			animation_size_1.visible = false
+# 			dead.visible = true
+# 			died.emit()
+# 		elif !is_on_wall():
+# 			current_distance_left = value
+# 			#label.text = str(current_distance_left)
 		
-	get :
-		return current_distance_left
+# 	get :
+# 		return current_distance_left
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -64,6 +67,11 @@ func increase_anim_size():
 func decrease_anim_size():
 	if current_anim_size <= 3 && current_anim_size > 1:
 		set_anim_size(current_anim_size - 1)
+	else:
+		process_mode = Node.PROCESS_MODE_DISABLED
+		animation_size_1.visible = false
+		dead.visible = true
+		died.emit()	
 
 
 func set_anim_size(size):
@@ -71,7 +79,7 @@ func set_anim_size(size):
 	dead.visible = false
 	match size :
 		1 :
-			current_distance_left = distance_between_sizes
+			# current_distance_left = distance_between_sizes
 			animation_size_1.visible = true
 			animation_size_2.visible = false
 			animation_size_3.visible = false
@@ -87,7 +95,7 @@ func set_anim_size(size):
 			current_animation = animation_size_1
 			current_anim_size = 1
 		2 :
-			current_distance_left = distance_between_sizes
+			# current_distance_left = distance_between_sizes
 			animation_size_1.visible = false
 			animation_size_2.visible = true
 			animation_size_3.visible = false
@@ -100,7 +108,7 @@ func set_anim_size(size):
 			current_animation = animation_size_2
 			current_anim_size = 2
 		3 :
-			current_distance_left = distance_between_sizes
+			# current_distance_left = distance_between_sizes
 			animation_size_1.visible = false
 			animation_size_2.visible = false
 			animation_size_3.visible = true
@@ -115,13 +123,14 @@ func set_anim_size(size):
 			
 func _ready():
 #	MOVE ALL THIS SHIT INTO SOME STATE MANAGEMENT? eh maybe later...
+	downsize_timer.timeout.connect(decrease_anim_size)
 	set_anim_size(3)
-	#size_1.pressed.connect(func():
-		#set_anim_size(1))
-	#size_2.pressed.connect(func():
-		#set_anim_size(2))
-	#size_3.pressed.connect(func():
-		#set_anim_size(3))
+	size_1.pressed.connect(func():
+		set_anim_size(1))
+	size_2.pressed.connect(func():
+		set_anim_size(2))
+	size_3.pressed.connect(func():
+		set_anim_size(3))
 	pass
 
 func get_gravity() -> float:
@@ -135,6 +144,20 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += get_gravity() * delta
 
+	# Handle size down
+	if Input.is_action_pressed("size_down"):
+		# await get_tree().create_timer(1.5).timeout
+		if downsize_timer.is_stopped():
+			downsize_timer.start()
+		else:
+			# slow down player if on ground
+			if is_on_floor():
+				velocity.x = move_toward(previous_vel.x, velocity.x, 10)
+
+	if Input.is_action_just_released("size_down"):
+		print("timer stopped")
+		downsize_timer.stop()
+
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and (is_on_floor() || !coyote_timer.is_stopped()):
 		last_dir_before_jump = direction
@@ -142,10 +165,14 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	direction = Input.get_axis("ui_left", "ui_right")
-	if direction:
-		var previous_vel = velocity
+	previous_vel = velocity
+	if direction && downsize_timer.is_stopped():
+		# previous_vel = velocity
 		if not is_on_floor() && direction == -(last_dir_before_jump):
-			velocity.x = (direction * SPEED) / (2 + delta)
+			if previous_vel.x == 0:
+				velocity.x = (direction * SPEED) / 2
+			else:
+				velocity.x = (direction * SPEED) / (2 + delta)
 		else:
 			velocity.x = direction * SPEED
 		if velocity.x > 0 :
@@ -159,13 +186,17 @@ func _physics_process(delta):
 			if previous_vel.x > 0 :
 				velocity.x = move_toward(previous_vel.x, velocity.x, slide_speed)
 		current_animation.play("run")
-		current_distance_left = current_distance_left - delta
+		# current_distance_left = current_distance_left - delta
 	else:
 		rotation_degrees = lerp(rotation_degrees, 0.0, .1)
 		velocity.x = move_toward(velocity.x, 0, slide_speed)
 		current_animation.play("idle")
 
 	var was_on_floor = is_on_floor()
+
+	if (Input.is_action_just_released("ui_left") || Input.is_action_just_released("ui_right")) && not is_on_floor():
+		# velocity.x = move_toward(previous_vel.x, 0, .004)
+		velocity.x = move_toward(previous_vel.x, velocity.x / .6, slide_speed)
 
 	
 	move_and_slide()

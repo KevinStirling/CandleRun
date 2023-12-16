@@ -11,7 +11,7 @@
 [node name="Node2D" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_jrspg")]
-z_index = 0
+z_index = 1
 position = Vector2(97, 209)
 SPEED = 170.0
 slide_speed = 20.0
@@ -29,7 +29,7 @@ layer_1/tile_data = PackedInt32Array(0, 65537, 4, 65536, 65537, 4, 131072, 65537
 [node name="CanvasGroup" type="CanvasGroup" parent="."]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="CanvasGroup"]
-color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+color = Color(0.133333, 0.133333, 0.133333, 1)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
