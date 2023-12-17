@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dgmfyng08kg24"]
+[gd_scene load_steps=10 format=3 uid="uid://dgmfyng08kg24"]
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_8psao"]
 [ext_resource type="PackedScene" uid="uid://domcgy8cnu58f" path="res://Scenes/player.tscn" id="2_eiogg"]
@@ -8,11 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://bdtxlhacsis5e" path="res://Scenes/webs.tscn" id="6_sqcjo"]
 [ext_resource type="PackedScene" uid="uid://brtp6o4dol702" path="res://Scenes/wax_spawner.tscn" id="7_4iy17"]
 [ext_resource type="PackedScene" uid="uid://bm4uyxw8v1v3s" path="res://Scenes/wax_chunk.tscn" id="8_kcsus"]
+[ext_resource type="PackedScene" uid="uid://dk7oqgm7g276v" path="res://Scenes/light_volume.tscn" id="9_3ud4e"]
 
-[node name="Level4" type="Node2D"]
+[node name="Level4" type="Node2D" node_paths=PackedStringArray("lanterns")]
+process_mode = 1
 script = ExtResource("1_8psao")
 starting_anim_size = 3
 player = ExtResource("2_eiogg")
+lanterns = [NodePath("Lantern")]
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2(-36, -10)
@@ -63,3 +66,11 @@ scale = Vector2(1.47767, 1.47767)
 [node name="WaxSpawner" parent="." instance=ExtResource("7_4iy17")]
 position = Vector2(144, 42)
 wax_chunk = ExtResource("8_kcsus")
+
+[node name="LightVolume" parent="." instance=ExtResource("9_3ud4e")]
+position = Vector2(252, 246)
+scale = Vector2(1.12, 1)
+
+[node name="LightVolume2" parent="." instance=ExtResource("9_3ud4e")]
+position = Vector2(279, 83)
+scale = Vector2(1.96, 1)

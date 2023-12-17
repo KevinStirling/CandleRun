@@ -32,6 +32,7 @@ func inc_lantern():
 
 
 func win():
+	print("won")
 	won.emit()
 	# display victory text or whatever
 	# load next level / call signal to load next level

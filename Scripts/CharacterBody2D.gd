@@ -123,16 +123,6 @@ func set_anim_size(size):
 			hitboxcoll_test.shape.size = Vector2(7, 12.5)
 			hitboxcoll_test.position = Vector2(0, 1.25)
 
-			
-			#hitbox1.body_entered.connect(func(body):
-				#if body is TileMap:
-					#in_damage_area = true
-			#)
-			#hitbox1.body_exited.connect(func(body):
-				#if body is TileMap:
-					#in_damage_area = false 
-			#)
-
 		2 :
 			# current_distance_left = distance_between_sizes
 			animation_size_1.visible = false
@@ -170,12 +160,10 @@ func _ready():
 #	MOVE ALL THIS SHIT INTO SOME STATE MANAGEMENT? eh maybe later...
 	hitbox_test.body_entered.connect(func(body):
 		if body is TileMap:
-			print("in damage")
 			in_damage_area = true
 	)
 	hitbox_test.body_exited.connect(func(body):
 		if body is TileMap:
-			print("out damage")
 			in_damage_area = false 
 	)
 	downsize_timer.timeout.connect(decrease_anim_size)
@@ -204,7 +192,6 @@ var last_dir_before_jump : float
 var direction : float
 
 func take_damage():
-	print("hit")
 	if not invincible && not is_dead: 
 		decrease_anim_size()
 		invincible = true

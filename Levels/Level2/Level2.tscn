@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dk7oqgm7g276v" path="res://Scenes/light_volume.tscn" id="6_bcncr"]
 
 [node name="Level2" type="Node2D" node_paths=PackedStringArray("lanterns")]
+process_mode = 1
 script = ExtResource("1_lwa8b")
 starting_anim_size = 1
 disable_shrink = true

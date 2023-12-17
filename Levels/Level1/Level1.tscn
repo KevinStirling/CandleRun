@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://day7v7snsfnq8" path="res://Scenes/jump_cntrl.tscn" id="7_5l611"]
 
 [node name="Level1" type="Node2D" node_paths=PackedStringArray("lanterns")]
+process_mode = 1
 script = ExtResource("1_djtpg")
 starting_anim_size = 1
 disable_shrink = true
