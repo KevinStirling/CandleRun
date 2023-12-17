@@ -18,3 +18,7 @@ func ignite(area : Area2D):
 		lit = true
 		fire_sprite.visible = true
 		fire_lit.emit()
+
+func _process(delta):
+	if lit == false:
+		fire_sprite.visible = false

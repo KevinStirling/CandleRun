@@ -35,21 +35,18 @@ func _ready():
 	next_level()
 
 func next_level():
-	if current_level == levels.size():
-		print("END")
-#		do something for end of game duh
-		pass
-	
-	var level = levels[current_level].instantiate()
-	if current_level_instance != null:
-		current_level_instance.queue_free()
-	current_level_instance = level
-	add_child(current_level_instance)
-	current_level_instance.won.connect(func():
-		await get_tree().create_timer(1.5).timeout
-		current_level += 1
-		next_level()
-	)
+	if levels.size() != 0:
+		var level = levels.pop_front().instantiate()
+		if current_level_instance != null:
+			current_level_instance.queue_free()
+		current_level_instance = level
+		add_child(current_level_instance)
+		current_level_instance.won.connect(func():
+			await get_tree().create_timer(1.5).timeout
+			current_level += 1
+			next_level()
+		)
+		
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:

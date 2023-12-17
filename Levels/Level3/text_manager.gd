@@ -3,10 +3,11 @@ extends CanvasLayer
 @onready var flammable = $"../Lantern"
 @onready var label = $Label
 
+@onready var level = get_parent()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	flammable.fire_lit.connect(lit)
+	level.won.connect(lit)
 
 func lit():
 	label.visible = true

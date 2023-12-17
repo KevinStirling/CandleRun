@@ -13,6 +13,8 @@ var player_instance : CandleMan
 var lanterns_lit = 0
 @export var lanterns : Array[Lantern]
 
+var has_won = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	player_instance = player.instantiate()
@@ -26,6 +28,7 @@ func _ready():
 
 
 func inc_lantern():
+	print("lit")
 	lanterns_lit += 1
 	if lanterns_lit == lanterns_required:
 		win()
@@ -33,12 +36,16 @@ func inc_lantern():
 
 func win():
 	print("won")
+	has_won = true
 	won.emit()
 	# display victory text or whatever
 	# load next level / call signal to load next level
 
 func lost():
-	print("dead")
-	await get_tree().create_timer(1.5).timeout
-	player_instance.respawn(starting_anim_size)
-	player_instance.position = spawn_point.position
+	if not has_won:
+		lanterns_lit = 0
+		await get_tree().create_timer(1.5).timeout
+		player_instance.respawn(starting_anim_size)
+		player_instance.position = spawn_point.position
+		for l in lanterns:
+			l.lit = false
