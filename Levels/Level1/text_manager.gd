@@ -3,16 +3,18 @@ extends CanvasLayer
 @onready var flammable = $"../Flammable"
 @onready var label = $Label
 @onready var label_2 = $Label2
+@onready var jump_cntrl = $"../JumpCntrl"
+@onready var movement_cntrl = $"../MovementCntrl"
+
+@export var level : Level
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	flammable.fire_lit.connect(lit)
+	level.won.connect(lit)
 
 func lit():
+	jump_cntrl.visible = false
+	movement_cntrl.visible = false
 	label.visible = true
 	label_2.visible = false
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

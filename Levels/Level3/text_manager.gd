@@ -1,6 +1,6 @@
 extends CanvasLayer
 	
-@onready var flammable = $"../Flammable"
+@onready var flammable = $"../Lantern"
 @onready var label = $Label
 
 

@@ -8,6 +8,7 @@ class_name WaxChunk
 @onready var fall_gravity : float = ((-2.0 * fall_height) / (fall_time_to_descent * fall_time_to_descent)) * -1.0
 @onready var trigger_area = $TriggerArea
 @onready var animation_player = $AnimationPlayer
+@onready var sprite_2d = $Sprite2D
 
 var falling = false
 
@@ -21,7 +22,9 @@ func _ready():
 
 func _body_entered(body : Node2D):
 #	check if body is tile map or character
-	if body is TileMap:
+	if body is TileMap || body is Flammable:
+		sprite_2d.play("splash")
+		await sprite_2d.animation_looped
 		queue_free()
 	elif body is CharacterBody2D:
 		if body.has_method("increase_anim_size") :

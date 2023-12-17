@@ -1,11 +1,73 @@
-[gd_scene load_steps=8 format=3 uid="uid://bm4uyxw8v1v3s"]
+[gd_scene load_steps=16 format=3 uid="uid://bm4uyxw8v1v3s"]
 
 [ext_resource type="Script" path="res://Scripts/wax_chunk.gd" id="1_bhvxn"]
-[ext_resource type="Texture2D" uid="uid://whj4w3lo6wdy" path="res://Assets/wax_chunk.png" id="2_3jg77"]
+[ext_resource type="Texture2D" uid="uid://ccm1v4llb3e7b" path="res://Assets/wax_chunk-Sheet.png" id="2_fngpp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7ft6p"]
 bounce = 1.0
 absorbent = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wngpq"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ajno"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asc3b"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uuwlo"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mc1yb"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cj8wn"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1vv7"]
+atlas = ExtResource("2_fngpp")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_umgf8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wngpq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ajno")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_asc3b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uuwlo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mc1yb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cj8wn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k1vv7")
+}],
+"loop": true,
+"name": &"splash",
+"speed": 30.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0hqv1"]
 size = Vector2(32.5623, 43.4164)
@@ -98,14 +160,16 @@ _data = {
 [node name="WaxChunk" type="StaticBody2D"]
 process_priority = -1
 scale = Vector2(0.1, 0.1)
-collision_layer = 4
+collision_layer = 0
+collision_mask = 5
 physics_material_override = SubResource("PhysicsMaterial_7ft6p")
 script = ExtResource("1_bhvxn")
 fall_height = 30.0
 fall_time_to_descent = 0.5
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_3jg77")
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_umgf8")
+animation = &"splash"
 
 [node name="TriggerArea" type="Area2D" parent="."]
 
