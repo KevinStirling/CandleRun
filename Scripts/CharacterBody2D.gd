@@ -58,27 +58,7 @@ var disable_shrink : bool
 var invincible : bool = false
 var in_damage_area = false
 
-# @export var distance_between_sizes : float
 var current_anim_size : int
-# var current_distance_left : float :
-# 	set (value) :
-# 		if value <= 0.0 && current_anim_size != 1:
-# 			decrease_anim_size()
-# 		elif value <= 0.0 && current_anim_size == 1 :
-# 			process_mode = Node.PROCESS_MODE_DISABLED
-# 			animation_size_1.visible = false
-# 			dead.visible = true
-# 			died.emit()
-# 		elif !is_on_wall():
-# 			current_distance_left = value
-# 			#label.text = str(current_distance_left)
-		
-# 	get :
-# 		return current_distance_left
-
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-#var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-
 func increase_anim_size():
 	if current_anim_size < 3 && current_anim_size > 0:
 		upsize_sfx.play()
@@ -140,7 +120,6 @@ func set_anim_size(size):
 			hitboxcoll_test.position = Vector2(0, -7.75)
 
 		3 :
-			hitbox_test
 			# current_distance_left = distance_between_sizes
 			animation_size_1.visible = false
 			animation_size_2.visible = false
